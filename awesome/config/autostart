@@ -1,0 +1,11 @@
+#!/bin/sh
+
+start() {
+  if ! pgrep -f $1 ;
+  then
+    $@&
+  fi 
+}
+
+# Compositor
+start picom --experimental-backends --config $HOME/.config/awesome/theme/picom.conf
