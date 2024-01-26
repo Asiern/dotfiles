@@ -1,0 +1,67 @@
+#!/bin/bash
+
+icon(){
+    # Check if there is an active connection
+    if [ $connections -ne 0 ]; then
+        # Get active connection and check if it's wifi or ethernet
+        nmcli connection show --active | grep -q "wifi"
+        if [ $? -eq 0 ]; then
+            echo  # Wifi connection
+        else
+            echo 󰈀 # Ethernet connection
+        fi
+    else
+        echo  # Disconnected
+    fi
+
+}
+
+getIp(){
+    # Get device name
+    device=$(nmcli c show --active | grep -v "loopback" | sed "1d" | awk -F " " '{print $6}')
+    # Get ip address
+    ip=$(ip addr show $device | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+    echo $ip
+}
+
+name(){
+    if [ $connections -ne 0 ]; then
+        if [ $connection_type = "wifi" ]; then
+            echo "Connected via $(getIp)"
+        else
+            echo "Connected via $(getIp)"
+        fi
+    else
+        echo "Disconnected"
+    fi
+}
+
+active(){
+    
+    echo $connections
+    if [ $connections -ne 0 ]; then
+        echo "El equipo está conectado a una red."
+    else
+        echo "El equipo no está conectado a ninguna red."
+        fi
+}
+
+
+# Get number of active connections
+connections=$(nmcli connection show --active | grep -v "loopback" | sed "1d" | wc -l)
+
+# Get connection type
+if [ $connections -ne 0 ]; then
+    # Get active connection and check if it's wifi or ethernet
+    nmcli connection show --active | grep -q "wifi"
+    if [ $? -eq 0 ]; then
+        connection_type="wifi"
+    else
+        connection_type="ethernet"
+    fi
+fi
+
+[ "$1" = "icon" ] && icon && exit
+[ "$1" = "name" ] && name && exit
+[ "$1" = "active" ] && active && exit
+[ "$1" = "ip" ] && getIp && exit

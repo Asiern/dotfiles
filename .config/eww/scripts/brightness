@@ -1,0 +1,41 @@
+#!/bin/bash
+# https://github.com/jeremija/wl-gammarelay
+
+# Variables
+night_temp=5000
+day_temp=6700
+
+# Get current temperature
+getTemp() {
+    busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Temperature | awk '{print $2}'
+}
+
+# Get current brightness
+getBrightness() {
+    busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Brightness | awk '{print $2}'
+}
+
+case $1 in
+    night)
+        # Toggle night mode
+        if [ $(getTemp) -eq $night_temp ]; then
+            # Set temperature to day
+            busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q $day_temp 
+            # Set eww to night mode (change icon)
+            eww update night_mode=true 
+        else
+            # Set temperature to night
+            busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q $night_temp 
+            # Set eww to day mode (change icon)
+            eww update night_mode=false 
+        fi
+        ;;
+    inc)
+        # Increase brightness by 0.2
+        busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateBrightness d +0.2
+        ;;
+    dec)
+        # Decrease brightness by 0.2
+        busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateBrightness d -0.2
+        ;;        
+esac

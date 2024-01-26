@@ -1,0 +1,97 @@
+$bg-dark: #131421;
+$bg: #222437;
+$fg: #DFE0E9;
+
+$background: #f7778f;
+$font: "FiraCode";
+$font-size: 14px;
+$font-weight: 400;
+$padding: 0.3rem;
+$border-radius: 6px;
+$hover-color: #a8304e;
+
+// Disables all default styles
+* {
+    all: unset;
+}
+
+tooltip {
+    background-color: $bg;
+    border-radius: $border-radius;
+}
+
+.eww_bar {
+    background-color: $bg-dark;
+    padding: .3rem;
+    border-radius: 6px;
+    font-family: $font;
+}
+
+.conn-icon {
+    color: white;
+    border: 0;
+}
+
+.clock {
+    font-weight: 400;
+    font-size: $font-size;
+    color: $fg;
+    font-weight: 600;
+}
+
+.square {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.square:hover {
+    background: $hover-color;
+    color: white;
+}
+
+.centerbox {
+    background-color: $bg;
+    border-radius: $border-radius;
+}
+
+.workspace {
+    border-radius: $border-radius;
+}
+
+.ws-button {
+    padding: $padding;
+    border-radius: $border-radius;
+    color: $fg;
+    font-family: $font;
+    font-size: $font-size;
+    font-weight: $font-weight;
+    padding: 0 1rem 0 1rem;
+}
+
+.ws-button:hover {
+    background-color: $bg;
+    color: $fg;
+}
+
+.center-item {
+    padding: 0 1rem 0 1rem;
+}
+
+.power {
+    padding: 0 1rem 0 1rem;
+}
+
+.power:hover {
+    background-color: $bg;
+    color: $fg;
+    border-radius: $border-radius;
+}
+
+.brightness {
+    color: $fg;
+}
+
+.button {
+    padding: 0 1rem 0 1rem;
+}

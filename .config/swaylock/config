@@ -1,0 +1,10 @@
+indicator
+ignore-empty-password
+indicator-thickness=15
+indicator-radius=150
+image=$HOME/.config/hypr/assets/wallpaper.png
+clock
+effect-blur=7x5
+font=Fira Code
+fade-in=0.5
+grace=2

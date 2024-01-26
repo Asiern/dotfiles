@@ -1,0 +1,135 @@
+;;Variables
+(defvar connection false); Conneciton menu is open
+(defvar power false); Power menu is open
+(defvar night_mode false); Night mode is on
+
+;; Time Functions
+(defpoll time :interval "1s"
+  :initial "initial-value"  ; optional, defaults to poll at startup
+`date +%H:%M:%S`)
+
+;; Connection functions
+(defpoll conn-icon :interval "1s" "scripts/conn icon") ;; Get the icon of the current connection
+(defpoll conn-name :interval "1s" "scripts/conn name") ;; Get the name of the current connection
+
+;; Workspace functions
+(defpoll workspace :interval "1s" "scripts/workspace list")
+
+;; Clock widget
+(defwidget clock_date []
+  (box :orientation "h"
+    (label :text time :class "clock")
+  )
+)
+
+;; Night mode widget
+(defwidget night_mode []
+  (eventbox :cursor "pointer"
+    (button :class "night_mode" :onclick "scripts/brightness night"
+      {night_mode ? "": ""}
+    )
+  )
+)
+
+;; Connection widget
+(defwidget connection []
+  (button :orientation "h" :tooltip conn-name :class "centerbox"
+    (label :text conn-icon)
+  )
+)
+
+;; Brightness widget
+(defwidget brightness []
+  (scale :value 50
+    :min 0
+    :max 100
+    :step 1
+    :class "brightness"
+    :width 100
+  )
+)
+
+;; Battery widget
+(defwidget battery []
+  (box :orientation "h" :class "center-item" :tooltip "Battery"
+    (label :text "󰂂")
+  )
+)
+
+;; Centerbox widget
+(defwidget center []
+  (box :orientation "h" :class "centerbox" :hexpand false
+    (night_mode)
+    (connection)
+    (battery)
+  ))
+
+
+
+;; Power widget
+(defwidget power []
+  (eventbox	:onhover "eww update power=true"
+    :onhoverlost "eww update power=false"
+    :cursor "pointer"
+    (box		:orientation "h"
+      :space-evenly "false"
+      :vexpand "false"
+      :class "powermenu"
+      (revealer	:transition "slideleft"
+        :reveal power
+        :duration "550ms"
+        (box		:orientation "h"
+          :space-evenly "false"
+          (button		:class "button"
+            :tooltip "Reboot"
+          :onclick "reboot"	"󰑓")
+          
+          (button		:class "button"
+            :tooltip "Lock Screen"
+          :onclick "swaylock"	"")))
+      (button		:class "button"
+        :tooltip "Shutdown"
+      :onclick "shutdown now"	"⏻"))))
+
+;; Left widgets
+(defwidget left []
+  (literal :content workspace))
+
+
+;; Right widgets
+(defwidget right []
+  (box :orientation "h" :space-evenly false :halign "end" :spacing 5
+    (center)
+    (power)
+  )
+)
+
+;; Window definition
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0%"
+    :y "20px"
+    :width "1880px"
+    :height "40px"
+    :anchor "top center"
+  )
+  :stacking "fg"
+  :reserve (struts :distance "40px" :side "top")
+  :windowtype "dock"
+  :wm-ignore false
+  :exclusive true
+  (bar)
+)
+
+(defwidget bar []
+  (box :class "eww_bar"
+    :orientation "h"
+    :vexpand "false"
+    :hexpand "false"
+    (centerbox
+      (left)
+      (clock_date)
+      (right)
+    )
+  )
+)

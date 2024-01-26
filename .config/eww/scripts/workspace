@@ -1,0 +1,37 @@
+#!/bin/bash
+
+active_icon=''
+focused_icon=''
+
+workspaces (){
+    # Get workspaces
+    workspaces=$(hyprctl workspaces | grep -v  "last" | grep "workspace" | awk -F ' ' '{print $3}')
+
+    # Get active workspace
+    active=$(hyprctl activeworkspace | head -n 1 | awk -F ' ' '{print $3}')
+
+    widget="(box :orientation \"h\" :space-evenly false :halign \"start\" :vexpand true :class \"workspace\""
+
+    for ws in $workspaces; do
+        if [ $ws -eq $active ]; then
+            widget+=" (eventbox :cursor \"pointer\" (button :class \"ws-button\" :vexpand true :onclick \"scripts/workspace switch $ws\" \"$focused_icon\"))"
+        else
+            widget+=" (eventbox :cursor \"pointer\" (button :class \"ws-button\" :vexpand true :onclick \"scripts/workspace switch $ws\" \"$active_icon\"))"
+        fi
+    done
+
+    widget+=")"
+
+    echo $widget
+}
+
+# Switch to workspace
+switch(){
+    hyprctl dispatch workspace $1 > /dev/null 2>&1
+}
+
+
+
+[ "$1" = "list" ] && workspaces && exit
+[ "$1" = "switch" ] && switch $2 && exit
+
