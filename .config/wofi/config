@@ -1,0 +1,6 @@
+prompt=
+color=$HOME/.config/wofi/colors
+allow_images=true
+insensitive=true
+no_actions=true
+location=center
